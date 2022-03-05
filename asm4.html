@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" type="text/css" href="./asm4.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	
+	<title></title>
+
+	<script type="text/javascript">
+
+
+	var token='0ca85916465bb4171651efb4004ec7fe';
+
+		$(document).ready(function () {
+			var api='https://gnews.io/api/v4/top-headlines?lang=en&token='+token;
+// var api="text.txt";
+
+fetch(api)
+.then(response => response.json())
+.then(data =>{hienThi(data)});
+
+function hienThi(data) {
+	$('.load').addClass('hide');
+	console.log(data);
+	$(data.articles).each(function(index){
+
+		var url=data.articles[index].url;
+		var img='<img class="img" src="'+data.articles[index].image+'">';
+		var title='<a href="'+url+'" target="_blank"> <h2 class="right">'+data.articles[index].title+'</h2></a>';
+		var publishedAt='<p class="right">'+data.articles[index].publishedAt+'</p>';
+		var content='<p class="right">'+data.articles[index].content+'</p>';
+
+		var col1='<div class="col-1">'+img+'</div>';
+		var col2='<div class="col-2">'+title+publishedAt+content+'</div>';
+		var row='<div class="row">'+col1+col2+'</div>';
+
+		$('main').append(row);
+	});
+};
+
+		$('#lup').click(function(){
+			$('.modal').removeClass('hide');
+		});
+
+		$('#x').click(function(){
+			$('.modal').addClass('hide');
+		})
+
+		$('#searchBtn').click(function(){
+			$('.load').removeClass('hide');
+			var keywords=$('#searchInp').val();
+
+			var lang=$('#langBtn :selected').val();
+			api='https://gnews.io/api/v4/search?q='+keywords +'&lang='+lang+'&token='+token;
+			console.log(lang,api);
+
+			search();
+			function search(){
+				$('main').empty();
+				fetch(api)
+				.then(response => response.json())
+				.then(data =>{hienThi(data)});
+			}
+
+			$('.modal').addClass('hide');
+		});
+
+			var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if ( this.readyState == 4 && this.status == 200) {
+       }
+    };
+
+	});
+
+</script>
+</head>
+<body>
+	<header>
+		<p class="load ">loading...</p>
+		<h1>NEWS</h1>
+		<a href="#"><img id="lup" src="search.jpg" alt="search" width="4%"></a>
+	</header>
+	
+	<!-- 	tao modal -->	
+	<div id="modal" class="hide modal">
+		<div class="lopPhu"></div>
+		<div class="modalBox">
+			<div id="modalContent">			
+				<label for="searchInp" class="mobile">Keywords</label>
+				<input class="mobile" type="search" id="searchInp">
+				<button class="mobile" id="searchBtn">Search</button><br>
+				<button id="x">&times;</button>
+
+				<label class="mobile" for="langBtn">Ngôn ngữ:</label>
+				<select class="mobile" id="langBtn">
+					<option value="en" selected="selected">english</option>
+					<option value="zh">chinese</option>
+					<option value="ja">japanese</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div class="row"></div>
+
+	<main>
+
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
